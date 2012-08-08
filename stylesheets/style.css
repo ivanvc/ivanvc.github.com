@@ -49,12 +49,27 @@ body, button, input, select, textarea { font-family: sans-serif; color: #222; }
    Links
    ========================================================================== */
 
-a { color: #00e; }
-a:visited { color: #551a8b; }
-a:focus { outline: thin dotted; }
+a {
+  color: #e39b3c;
+  text-decoration: none;
+  font-weight: bold;
+  letter-spacing: -1px;
+}
+
+a:visited {
+  color: #e39b3c;
+}
+
+a:focus {
+  outline: thin dotted;
+}
 
 /* Improve readability when focused and hovered in all browsers: people.opera.com/patrickl/experiments/keyboard/test */
-a:hover, a:active { outline: 0; }
+a:hover, a:active {
+  outline: 0;
+  color: #333;
+  text-decoration: underline;
+}
 
 
 /* =============================================================================
@@ -207,19 +222,70 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  color: #333;
+  color: #404040;
 }
 
 h1 {
-  font: 55px normal 'Lobster', cursive;
+  font: 45px 'Doppio One', sans-serif;
+  letter-spacing: -3px;
   text-shadow: 0 1px 0 rgba(255,255,255,.5);
   margin-bottom: 20px;
 }
 
 div#container {
-  font: 18px 'Signika' sans-serif;
+  font: 20px Signika;
   margin: 100px 80px;
-  width: 500px;
+  width: 450px;
+}
+
+span.heart {
+  color: #CC0067;
+  font-size: 18px;
+}
+
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('https://github.com/FortAwesome/Font-Awesome/blob/master/font/fontawesome-webfont.eot?raw=true');
+  src: url('https://github.com/FortAwesome/Font-Awesome/blob/master/font/fontawesome-webfont.eot?raw=true&#iefix') format('embedded-opentype'),
+     url('https://github.com/FortAwesome/Font-Awesome/blob/master/font/fontawesome-webfont.woff?raw=true') format('woff'),
+     url('https://github.com/FortAwesome/Font-Awesome/blob/master/font/fontawesome-webfont.ttf?raw=true') format('truetype'),
+     url('https://github.com/FortAwesome/Font-Awesome/blob/master/font/fontawesome-webfont.svg?raw=true#FontAwesome') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.contact {
+  padding-top: 15px;
+  font-size: 16px;
+  text-shadow: 0 1px 0 rgba(255,255,255,.5);
+}
+
+.contact a, .contact a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+i {
+  font-family: 'FontAwesome';
+  display: inline;
+  padding-right: 8px;
+}
+
+.mail i:before {
+  content: "\f003";
+  color: #;
+}
+
+.linkedin :before {
+  content: "\f0e1";
+}
+
+.github i:before {
+  content: "\f09b";
+}
+
+.twitter i:before {
+  content: "\f099";
 }
 
 /* =============================================================================
