@@ -267,12 +267,20 @@ table { border-collapse: collapse; border-spacing: 0; }
    ========================================================================== */
 
 body {
-  background: url(../images/breakfast.jpg);
+  background: #fff6b3 url(../images/breakfast.jpg) no-repeat fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   color: #404040;
+}
+
+#container {
+  opacity: 0;
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -o-transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
 }
 
 h1 {
