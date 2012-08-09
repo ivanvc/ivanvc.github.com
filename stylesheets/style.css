@@ -290,10 +290,11 @@ h1 {
 }
 
 h2 {
-  font: 24px 'Lobster', cursive;
+  font: 24px 'Quicksand', cursive;
+  letter-spacing: -3px;
   color: #E49A37;
   position: relative;
-  left: 175px;
+  left: 180px;
   top: -10px;
 }
 
