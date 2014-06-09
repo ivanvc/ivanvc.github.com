@@ -1,0 +1,65 @@
+==================================================================
+https://keybase.io/ivan
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://ivan.vc
+  * I am ivan (https://keybase.io/ivan) on keybase.
+  * I have a public key with fingerprint 67A9 5D46 D983 86A2 D31E  F773 4037 D377 41ED 0CC5
+
+To claim this, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "67a95d46d98386a2d31ef7734037d37741ed0cc5",
+            "host": "keybase.io",
+            "key_id": "4037d37741ed0cc5",
+            "uid": "fc75c850831f4e70c46eedd4a39f5800",
+            "username": "ivan"
+        },
+        "service": {
+            "hostname": "ivan.vc",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1402326985,
+    "expire_in": 157680000,
+    "prev": "bbd9f3d758f23d965e6e041b033c8da353cc04a5274c23737c5b05ca09b46f4c",
+    "seqno": 12,
+    "tag": "signature"
+}
+
+with the aforementioned key, yielding the PGP signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v0.1.21
+Comment: https://keybase.io/crypto
+
+yMHhAnicbZFfSBRdGMZ3XVNWWhAvzIKwhkwKsbNz5t+uXiS2fIhBmGWE5jZz5sw6
+fjWzzeyu/6EMIUIMQfMqLzRoW8ogLxLBxT91EQVmgt209lVGbmig9EGYuZ6Rgi66
+Gs7z/p7nfYb3qcthy7If5+ebylZ3P7O/mEyGbdX9s8/bKEmXWyhvG/Uv3vkoqhbA
+RtBQtRDlpThe9LAyw8keAQqcSMvQjRWehwyAvAx5nnFjGSDEUkVUg25aDhIjiSYu
+VnWikYdflYn6Fz68M1AQzyKBBQJ0KwzmAWI4jGWZEaFHYQUALNDEhiZexoRWI6JG
+dRRRRImoiChtO2v/mBZHELEEDT2kI/0SERtCoaDX8oRaghbUhCX/L7tfUjWZ/C4x
+RLBhqrpGed2ERCHVynMzgIY05xHYIgo3B1UD+1WLYHmOFAPAWoMjJFKSZI8CZZ4V
+FBrKHo7FHAaMWwIQIkEWIQsRAozI0jyDaMhDHrESYJEIPBLDKYxV2MRXNJ1k06Sn
+GCCZphrQxFDYwFTH9GRdus2eZcvYlWZdzJblzP59x+rhzFSkyrZJDSx/v1Db3urq
+fvzk0avkardv+fOb/ev/1E4I/TdmB6855nJ9zq2J/APHUrHxkpnSwy8fXL19Zywy
+tVZQ8d9K57vNLjjfEX2Ngo7cwk6gyR+HM1KpgsWBvPv/z90dyv72xfFwpvVT9H3l
+z83Givi+I0OJ8zWjF8sLRypdzOLg9Kk+s/dQvLGm70O+Y8hcz0vo1UvJGtSspJ1L
+hgPe3rM9966Xj/uj9tFEe1c5Hskoje/FeWMnM33hHwu+qujX5ltvF/Y4z+TUp7dW
+rLly2o86Y53M6Y3GuD9RtmUurczEYu7YxsIUXZd+8GZPbX2fWZY7ElyvOzFglGwD
+1vET9w==
+=X2oH
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/ivan
+
+==================================================================
