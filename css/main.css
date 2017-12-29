@@ -124,15 +124,7 @@ header h1:hover:after {
 header h2 {
   text-align: left;
   font-weight: 400;
-}
-
-header ul {
-  padding: 0;
   margin-top: 4rem;
-}
-
-header ul li {
-  display: inline;
 }
 
 header img {
@@ -148,7 +140,7 @@ header img:hover {
 
 header a, header a:visited {
   color: #1abc9c;
-  transition: all 0.5s ease-out;
+  transition: all 0.25s ease-out;
 }
 
 header a:hover {
@@ -156,34 +148,18 @@ header a:hover {
 }
 
 .github:hover {
-  background: -webkit-linear-gradient(left, #34495e, #2c3e50);
-  background: linear-gradient(left, #34495e, #2c3e50);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   color: #2c3e50;
 }
 
 .husband:hover {
-  background: -webkit-linear-gradient(left, #9b59b6, #8e44ad);
-  background: linear-gradient(left, #9b59b6, #8e44ad);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   color: #9b59b6;
 }
 
 .homebrewer:hover {
-  background: -webkit-linear-gradient(left, #f1c40f, #f39c12);
-  background: linear-gradient(left, #f1c40f, #f39c12);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   color: #f1c40f;
 }
 
 .strava:hover {
-  background: -webkit-linear-gradient(left, #e67e22, #f39c12);
-  background: linear-gradient(left, #e67e22, #f39c12);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   color: #e67e22;
 }
 
@@ -196,18 +172,10 @@ header a:hover {
 }
 
 .linkedin:hover {
-  background: -webkit-linear-gradient(left, #2980b9, #3498db);
-  background: linear-gradient(left, #2980b9, #3498db);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   color: #2980b9;
 }
 
 .aki:hover {
-  background: -webkit-linear-gradient(left, #f39c12, #e74c3c);
-  background: linear-gradient(left, #f39c12, #e74c3c);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   color: #f39c12;
 }
 
