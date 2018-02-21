@@ -76,122 +76,127 @@ function formatDate(date) {
 }
 
 function initMap() {
-				var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+	var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
 		new google.maps.Size(40, 37),
 		new google.maps.Point(0, 0),
 		new google.maps.Point(12, 35));
 	map = new google.maps.Map(document.getElementById('map'), {
+		//zoom: 11,
+		//center: {lat: 37.7576171, lng:-122.4376844},
 		mapTypeId: 'terrain'
 	});
 
 	// Try HTML5 geolocation.
-				if (navigator.geolocation) {
-					navigator.geolocation.getCurrentPosition(function(position) {
-						var pos = {
-							lat: position.coords.latitude,
-							lng: position.coords.longitude
-						};
-						var pinImage = new google.maps.MarkerImage("https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|3498db",
+	if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position) {
+			var pos = {
+				lat: position.coords.latitude,
+				lng: position.coords.longitude
+			};
+			var pinImage = new google.maps.MarkerImage("https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|3498db",
 				new google.maps.Size(21, 34),
 				new google.maps.Point(0,0),
 				new google.maps.Point(10, 34)
 			);
 
 			var marker = new google.maps.Marker({
-						position: pos, 
-						map: map,
-						opacity: 0.5,
-						icon: pinImage,
-						shadow: pinShadow,
-						animation: google.maps.Animation.DROP
-			 });
+				position: pos,
+				map: map,
+				opacity: 0.5,
+				icon: pinImage,
+				shadow: pinShadow,
+				animation: google.maps.Animation.DROP
+			});
 
-						//map.setCenter(pos);
-					}, function() {
-					});
-				} else {
-					// Browser doesn't support Geolocation
-				}
-
-        function getPoints(data) {
-          return data.response.feedMessageResponse.messages.message.map(function(m) {
-              return {lat:m.latitude, lng: m.longitude}
-          })
-        }
+			//map.setCenter(pos);
+		}, function() {
+		});
+	} else {
+		// Browser doesn't support Geolocation
+	}
 
 	var request = new XMLHttpRequest();
-request.open('GET', 'https://api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/03f7QyUHCTm5g2hILaju1Spuzgf2KrNtj/message', true);
+	request.open('GET', 'https://api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/03f7QyUHCTm5g2hILaju1Spuzgf2KrNtj/message', true);
 
-request.onload = function() {
-	if (request.status >= 200 && request.status < 400) {
-		// Success!
-		var data = JSON.parse(request.responseText);
-		var p = getPoints(data);
-		var count = data.response.feedMessageResponse.count
-		var line = new google.maps.Polyline({
-					path: p,
-					strokeColor: '#e67e22',
-					strokeOpacity: 1,
-					strokeWeight: 2
-				});
+	request.onload = function() {
+		if (request.status >= 200 && request.status < 400) {
+			// Success!
+			var data = JSON.parse(request.responseText);
+			var p = getPoints(data);
+			var count = data.response.feedMessageResponse.count
 
-		line.setMap(map);
-		for (var i = data.response.feedMessageResponse.messages.message.length - 1; i >= 0 ; i--) {
-			var m = data.response.feedMessageResponse.messages.message[i];
-			(function(m) {
-			var pinColor = "e74c3c";
-			var text = "•";
-			if (m.messageType !== "UNLIMITED-TRACK") {
-				text = "C";
-				pinColor = "f39c12";
-			}
-			var pinImage = new google.maps.MarkerImage("https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+text+"|" + pinColor,
-				new google.maps.Size(21, 34),
-				new google.maps.Point(0,0),
-				new google.maps.Point(10, 34)
-			);
+			var previous;
+			for (var i = count - 1; i >= 0 ; i--) {
+				var m = data.response.feedMessageResponse.messages.message[i];
+				(function(m, previous) {
+					if (typeof previous !== "undefined") {
+						var line = new google.maps.Polyline({
+							path: [{lat: m.latitude, lng: m.longitude}, {lat: previous.latitude, lng: previous.longitude}],
+							strokeColor: '#e67e22',
+							strokeOpacity: (count - i + 1)/count,
+							strokeWeight: 2,
+							map: map
+						});
 
-			var marker = new google.maps.Marker({
-						position: {lat: m.latitude, lng: m.longitude}, 
+					}
+					var marker = new google.maps.Marker({
+						position: {lat: m.latitude, lng: m.longitude},
 						map: map,
-						opacity: (count - i)/count,
-						icon: pinImage,
-						shadow: pinShadow,
 						zIndex: count - i
-			 });
-				 var infowindow = new google.maps.InfoWindow({
+					});
+					if (m.messageType === "UNLIMITED-TRACK") {
+						marker.setIcon({
+							path: google.maps.SymbolPath.CIRCLE,
+							scale: (count - i) * 5 / count
+						});
+						marker.setOpacity((count - i)/count);
+					}
+
+					var infowindow = new google.maps.InfoWindow({
 						content: '<div id="content"><div id="bodyContent"><p>' + formatDate(new Date(m.dateTime)) + '<br /><b>Battery:</b> ' + m.batteryState + '</p></div></div>'
 					});
-				marker.addListener('click', function() {
-					infowindow.open(map, marker);
-				});
-				if (i === 0) {
-					document.getElementById("lastMessage").innerHTML = formatDate(new Date(m.dateTime));
-					document.getElementById("floating-panel").addEventListener('click', function() {
-					infowindow.open(map, marker);
-					})
-					map.setCenter({lat: m.latitude, lng: m.longitude});
-					map.setZoom(15);
-					marker.setAnimation(google.maps.Animation.BOUNCE);
-					setTimeout(function() { marker.setAnimation(null) }, 3000)
-				}
-			 })(m);
-		 }
-	} else {
-		// We reached our target server, but it returned an error
+					marker.addListener('click', function() {
+						infowindow.open(map, marker);
+					});
+					if (i === 0) {
+						document.getElementById("lastMessage").innerHTML = formatDate(new Date(m.dateTime));
+						document.getElementById("floating-panel").addEventListener('click', function() {
+							infowindow.open(map, marker);
+						})
+						map.setCenter({lat: m.latitude, lng: m.longitude});
+						map.setZoom(13);
+						marker.setAnimation(google.maps.Animation.BOUNCE);
+						setTimeout(function() { marker.setAnimation(null) }, 3000)
+					}
+				})(m, previous);
+				previous = m;
+			}
 
-	}
-};
+			/*heatmap = new google.maps.visualization.HeatmapLayer({
+			data: getPoints(data),
+			map: map
+		});*/
+		} else {
+			// We reached our target server, but it returned an error
 
-request.onerror = function() {
-	// There was a connection error of some sort
-};
+		}
+	};
 
-request.send();
+	request.onerror = function() {
+		// There was a connection error of some sort
+	};
 
+	request.send();
 
 }
-			</script>
+
+// Heatmap data: 500 Points
+function getPoints(data) {
+	return data.response.feedMessageResponse.messages.message.map(function(m) {
+		return {lat:m.latitude, lng: m.longitude}
+	})
+}
+    </script>
 		<script async defer
 			 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxw_uDc5b-LE3rJcX_waJaN3F4mrdS9lM&libraries=visualization&callback=initMap">
 		</script>
