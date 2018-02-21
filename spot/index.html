@@ -133,7 +133,7 @@ function initMap() {
 						var line = new google.maps.Polyline({
 							path: [{lat: m.latitude, lng: m.longitude}, {lat: previous.latitude, lng: previous.longitude}],
 							strokeColor: '#e67e22',
-							strokeOpacity: (count - i + 1)/count,
+							strokeOpacity: (count - i + 1)*0.5/count + 0.5,
 							strokeWeight: 2,
 							map: map
 						});
@@ -149,7 +149,7 @@ function initMap() {
 							path: google.maps.SymbolPath.CIRCLE,
 							scale: (count - i) * 5 / count
 						});
-						marker.setOpacity((count - i)/count);
+						marker.setOpacity((count - i)*0.5/count + 0.5);
 					}
 
 					var infowindow = new google.maps.InfoWindow({
