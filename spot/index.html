@@ -56,12 +56,12 @@ html, body {
 		</div>
 		<div id="map"></div>
 		<!-- Replace the value of the key parameter with your own API key. -->
-		<script type="javascript">
+    <script>
 			// This example requires the Visualization library. Include the libraries=visualization
 			// parameter when you first load the API. For example:
 			// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
 
-var map, heatmap;
+var map;
 
 function formatDate(date) {
 	var hours = date.getHours();
@@ -173,11 +173,6 @@ request.onload = function() {
 				}
 			 })(m);
 		 }
-
-		/*heatmap = new google.maps.visualization.HeatmapLayer({
-			data: getPoints(data),
-			map: map
-		});*/
 	} else {
 		// We reached our target server, but it returned an error
 
