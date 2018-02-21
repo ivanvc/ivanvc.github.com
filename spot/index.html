@@ -9,6 +9,7 @@
 			gtag('config', 'UA-111664248-1');
 		</script>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta charset="utf-8">
 		<meta description="Iván is a runner">
 		<title>Iván Valdés Castillo's Spot</title>
@@ -170,7 +171,7 @@ request.onload = function() {
 					infowindow.open(map, marker);
 					})
 					map.setCenter({lat: m.latitude, lng: m.longitude});
-					map.setZoom(13);
+					map.setZoom(15);
 					marker.setAnimation(google.maps.Animation.BOUNCE);
 					setTimeout(function() { marker.setAnimation(null) }, 3000)
 				}
