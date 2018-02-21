@@ -1,25 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111664248-1"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'UA-111664248-1');
-    </script>
+	<head>
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111664248-1"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'UA-111664248-1');
+		</script>
 
-    <meta charset="utf-8">
-    <meta http-equiv="refresh" content="0; url=https://share.findmespot.com/shared/faces/viewspots.jsp?glId=03f7QyUHCTm5g2hILaju1Spuzgf2KrNtj">
-    <meta description="Iván is a runner">
-    <title>Iván Valdés Castillo's Spot</title>
-    <link rel="shortcut icon" href="http://ivan.vc/favicon.png">
-  </head>
-  <body>
-    <center>
-      <h1>
-        <a href="https://share.findmespot.com/shared/faces/viewspots.jsp?glId=03f7QyUHCTm5g2hILaju1Spuzgf2KrNtj">go</a>
-      </h1>
-    </center>
-  </body>
+		<meta charset="utf-8">
+		<meta description="Iván is a runner">
+		<title>Iván Valdés Castillo's Spot</title>
+		<link rel="shortcut icon" href="http://ivan.vc/favicon.png">
+
+		<style>
+/* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+#map {
+	height: 100%;
+}
+/* Optional: Makes the sample page fill the window. */
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+#floating-panel {
+	position: absolute;
+	top: 10px;
+	left: 25%;
+	z-index: 5;
+	background-color: #fff;
+	padding: 5px;
+	border: 1px solid #999;
+	text-align: center;
+	font-family: 'Roboto','sans-serif';
+	line-height: 30px;
+	padding-left: 10px;
+}
+#floating-panel {
+	background-color: #fff;
+	border: 1px solid #999;
+	left: 25%;
+	padding: 5px;
+	position: absolute;
+	top: 10px;
+	z-index: 5;
+}
+		</style>
+	</head>
+	<body>
+		<div id="floating-panel">
+			Last message from: <span id="lastMessage"></span>
+		</div>
+		<div id="map"></div>
+		<!-- Replace the value of the key parameter with your own API key. -->
+		<script async defer
+			 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxw_uDc5b-LE3rJcX_waJaN3F4mrdS9lM&libraries=visualization&callback=initMap">
+		</script>
+
+		<script type="javascript">
+			// This example requires the Visualization library. Include the libraries=visualization
+			// parameter when you first load the API. For example:
+			// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
+
+var map, heatmap;
+
+function formatDate(date) {
+	var hours = date.getHours();
+	var minutes = date.getMinutes();
+	var ampm = hours >= 12 ? 'pm' : 'am';
+	hours = hours % 12;
+	hours = hours ? hours : 12; // the hour '0' should be '12'
+	minutes = minutes < 10 ? '0'+minutes : minutes;
+	var strTime = hours + ':' + minutes + ' ' + ampm;
+	return date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + strTime;
+}
+
+function initMap() {
+				var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+		new google.maps.Size(40, 37),
+		new google.maps.Point(0, 0),
+		new google.maps.Point(12, 35));
+	map = new google.maps.Map(document.getElementById('map'), {
+		//zoom: 11,
+		//center: {lat: 37.7576171, lng:-122.4376844},
+		mapTypeId: 'terrain'
+	});
+
+	// Try HTML5 geolocation.
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(function(position) {
+						var pos = {
+							lat: position.coords.latitude,
+							lng: position.coords.longitude
+						};
+						var pinImage = new google.maps.MarkerImage("https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|3498db",
+				new google.maps.Size(21, 34),
+				new google.maps.Point(0,0),
+				new google.maps.Point(10, 34)
+			);
+
+			var marker = new google.maps.Marker({
+						position: pos, 
+						map: map,
+						opacity: 0.5,
+						icon: pinImage,
+						shadow: pinShadow,
+						animation: google.maps.Animation.DROP
+			 });
+
+						//map.setCenter(pos);
+					}, function() {
+					});
+				} else {
+					// Browser doesn't support Geolocation
+				}
+
+	var request = new XMLHttpRequest();
+request.open('GET', '//api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/03f7QyUHCTm5g2hILaju1Spuzgf2KrNtj/message', true);
+
+request.onload = function() {
+	if (request.status >= 200 && request.status < 400) {
+		// Success!
+		var data = JSON.parse(request.responseText);
+		var p = getPoints(data);
+		console.log(p)
+		var count = data.response.feedMessageResponse.count
+		var line = new google.maps.Polyline({
+					path: p,
+					strokeColor: '#e67e22',
+					strokeOpacity: 1,
+					strokeWeight: 2
+				});
+
+		line.setMap(map);
+		for (var i = data.response.feedMessageResponse.messages.message.length - 1; i >= 0 ; i--) {
+			var m = data.response.feedMessageResponse.messages.message[i];
+			(function(m) {
+			var pinColor = "e74c3c";
+			var text = "•";
+			if (m.messageType !== "UNLIMITED-TRACK") {
+				text = "C";
+				pinColor = "f39c12";
+			}
+			var pinImage = new google.maps.MarkerImage("https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld="+text+"|" + pinColor,
+				new google.maps.Size(21, 34),
+				new google.maps.Point(0,0),
+				new google.maps.Point(10, 34)
+			);
+
+			var marker = new google.maps.Marker({
+						position: {lat: m.latitude, lng: m.longitude}, 
+						map: map,
+						opacity: (count - i)/count,
+						icon: pinImage,
+						shadow: pinShadow,
+						zIndex: count - i
+			 });
+				 var infowindow = new google.maps.InfoWindow({
+						content: '<div id="content"><div id="bodyContent"><p>' + formatDate(new Date(m.dateTime)) + '<br /><b>Battery:</b> ' + m.batteryState + '</p></div></div>'
+					});
+				marker.addListener('click', function() {
+					infowindow.open(map, marker);
+				});
+				if (i === 0) {
+					document.getElementById("lastMessage").innerHTML = formatDate(new Date(m.dateTime));
+					document.getElementById("floating-panel").addEventListener('click', function() {
+					infowindow.open(map, marker);
+					})
+					map.setCenter({lat: m.latitude, lng: m.longitude});
+					map.setZoom(13);
+					marker.setAnimation(google.maps.Animation.BOUNCE);
+					setTimeout(function() { marker.setAnimation(null) }, 3000)
+				}
+			 })(m);
+		 }
+
+		/*heatmap = new google.maps.visualization.HeatmapLayer({
+			data: getPoints(data),
+			map: map
+		});*/
+	} else {
+		// We reached our target server, but it returned an error
+
+	}
+};
+
+request.onerror = function() {
+	// There was a connection error of some sort
+};
+
+request.send();
+
+
+}
+
+function toggleHeatmap() {
+	heatmap.setMap(heatmap.getMap() ? null : map);
+}
+
+function changeGradient() {
+	var gradient = [
+		'rgba(0, 255, 255, 0)',
+		'rgba(0, 255, 255, 1)',
+		'rgba(0, 191, 255, 1)',
+		'rgba(0, 127, 255, 1)',
+		'rgba(0, 63, 255, 1)',
+		'rgba(0, 0, 255, 1)',
+		'rgba(0, 0, 223, 1)',
+		'rgba(0, 0, 191, 1)',
+		'rgba(0, 0, 159, 1)',
+		'rgba(0, 0, 127, 1)',
+		'rgba(63, 0, 91, 1)',
+		'rgba(127, 0, 63, 1)',
+		'rgba(191, 0, 31, 1)',
+		'rgba(255, 0, 0, 1)'
+	]
+	heatmap.set('gradient', heatmap.get('gradient') ? null : gradient);
+}
+
+function changeRadius() {
+	heatmap.set('radius', heatmap.get('radius') ? null : 20);
+}
+
+function changeOpacity() {
+	heatmap.set('opacity', heatmap.get('opacity') ? null : 0.2);
+}
+
+// Heatmap data: 500 Points
+function getPoints(data) {
+	return data.response.feedMessageResponse.messages.message.map(function(m) {
+		return {lat:m.latitude, lng: m.longitude}
+	})
+}
+			</script>
+	</body>
 </html>
