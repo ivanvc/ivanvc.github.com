@@ -112,6 +112,12 @@ function initMap() {
 					// Browser doesn't support Geolocation
 				}
 
+        function getPoints(data) {
+          return data.response.feedMessageResponse.messages.message.map(function(m) {
+              return {lat:m.latitude, lng: m.longitude}
+          })
+        }
+
 	var request = new XMLHttpRequest();
 request.open('GET', 'https://api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/03f7QyUHCTm5g2hILaju1Spuzgf2KrNtj/message', true);
 
@@ -120,7 +126,6 @@ request.onload = function() {
 		// Success!
 		var data = JSON.parse(request.responseText);
 		var p = getPoints(data);
-		console.log(p)
 		var count = data.response.feedMessageResponse.count
 		var line = new google.maps.Polyline({
 					path: p,
