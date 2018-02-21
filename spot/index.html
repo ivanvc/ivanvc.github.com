@@ -80,8 +80,6 @@ function initMap() {
 		new google.maps.Point(0, 0),
 		new google.maps.Point(12, 35));
 	map = new google.maps.Map(document.getElementById('map'), {
-		//zoom: 11,
-		//center: {lat: 37.7576171, lng:-122.4376844},
 		mapTypeId: 'terrain'
 	});
 
@@ -115,7 +113,7 @@ function initMap() {
 				}
 
 	var request = new XMLHttpRequest();
-request.open('GET', '//api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/03f7QyUHCTm5g2hILaju1Spuzgf2KrNtj/message', true);
+request.open('GET', 'https://api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/03f7QyUHCTm5g2hILaju1Spuzgf2KrNtj/message', true);
 
 request.onload = function() {
 	if (request.status >= 200 && request.status < 400) {
