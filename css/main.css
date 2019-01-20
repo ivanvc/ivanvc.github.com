@@ -127,15 +127,30 @@ header h2 {
   margin-top: 4rem;
 }
 
-header img {
+header figure {
+  position: relative;
+  display: block;
+  width: 10rem;
+  margin: 0 auto;
+}
+
+header img.picture {
   margin: auto;
   border-radius: 50%;
-  width: 5.5rem;
+  width: 9rem;
   transition: all 0.5s ease-out;
 }
 
-header img:hover {
+header img.picture:hover {
   border-radius: 0;
+}
+
+header img.team {
+  display: float;
+  position: absolute;
+  right: 0.5rem;
+  bottom: 0;
+  width: 3rem;
 }
 
 header a, header a:visited {
