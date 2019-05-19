@@ -129,9 +129,14 @@ header h2 {
 
 header figure {
   position: relative;
-  display: block;
+  display: inline;
   width: 10rem;
   margin: 0 auto;
+}
+
+header img {
+  margin-left: 2rem;
+  margin-right: 2rem;
 }
 
 header img.picture {
@@ -146,11 +151,17 @@ header img.picture:hover {
 }
 
 header img.team {
-  display: float;
-  position: absolute;
   right: 0.5rem;
+}
+
+header img.team.one {
+  width: 5rem;
+  top: 0;
+}
+
+header img.team.two {
+  width: 6rem;
   bottom: 0;
-  width: 3rem;
 }
 
 header a, header a:visited {
