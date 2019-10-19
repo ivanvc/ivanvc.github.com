@@ -1,205 +1,233 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111664248-1"></script>
-		<script>
-			window.dataLayer = window.dataLayer || [];
-			function gtag(){dataLayer.push(arguments);}
-			gtag('js', new Date());
-			gtag('config', 'UA-111664248-1');
-		</script>
+  <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111664248-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-111664248-1');
+    </script>
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.js'></script>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta charset="utf-8">
-		<meta description="Iván is a runner">
-		<title>Iván Valdés Castillo's Spot</title>
-		<link rel="shortcut icon" href="http://ivan.vc/favicon.png">
+    <meta charset="utf-8">
+    <meta description="Iván is a runner">
+    <title>Iván Valdés Castillo's Spot</title>
+    <link rel="shortcut icon" href="http://ivan.vc/favicon.png">
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.1/mapbox-gl.css' rel='stylesheet' />
 
-		<style>
+    <style>
 /* Always set the map height explicitly to define the size of the div
  * element that contains the map. */
 #map {
-	height: 100%;
+  height: 100%;
 }
 /* Optional: Makes the sample page fill the window. */
 html, body {
-	height: 100%;
-	margin: 0;
-	padding: 0;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 #floating-panel {
-	position: absolute;
-	top: 10px;
-	left: 25%;
-	z-index: 5;
-	background-color: #fff;
-	padding: 5px;
-	border: 1px solid #999;
-	text-align: center;
-	font-family: 'Roboto','sans-serif';
-	line-height: 30px;
-	padding-left: 10px;
+  position: absolute;
+  top: 10px;
+  left: 25%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
 }
 #floating-panel {
-	background-color: #fff;
-	border: 1px solid #999;
-	left: 25%;
-	padding: 5px;
-	position: absolute;
-	top: 10px;
-	z-index: 5;
+  background-color: #fff;
+  border: 1px solid #999;
+  left: 25%;
+  padding: 5px;
+  position: absolute;
+  top: 10px;
+  z-index: 5;
 }
-		</style>
-	</head>
-	<body>
-		<div id="floating-panel">
-			Last message from: <span id="lastMessage"></span>
-		</div>
-		<div id="map"></div>
-		<!-- Replace the value of the key parameter with your own API key. -->
+    </style>
+  </head>
+  <body>
+    <div id="floating-panel">
+      Last message from: <span id="lastMessage"></span>
+    </div>
+    <div id="map"></div>
+    <!-- Replace the value of the key parameter with your own API key. -->
     <script>
-			// This example requires the Visualization library. Include the libraries=visualization
-			// parameter when you first load the API. For example:
-			// <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=visualization">
+      mapboxgl.accessToken = 'pk.eyJ1IjoiaXZhbi12YyIsImEiOiJjazF4MDNucDAwN2VoM25tdTd0dWd0NWV1In0.8PR2BCJoVJ-CaTrR_NLZtA';
+      var map;
 
-var map;
+      function formatDate(date) {
+        var hours = date.getHours();
+        var minutes = date.getMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0'+minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm;
+        return date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + strTime;
+      }
 
-function formatDate(date) {
-	var hours = date.getHours();
-	var minutes = date.getMinutes();
-	var ampm = hours >= 12 ? 'pm' : 'am';
-	hours = hours % 12;
-	hours = hours ? hours : 12; // the hour '0' should be '12'
-	minutes = minutes < 10 ? '0'+minutes : minutes;
-	var strTime = hours + ':' + minutes + ' ' + ampm;
-	return date.getMonth()+1 + "/" + date.getDate() + "/" + date.getFullYear() + " " + strTime;
+      function initMap() {
+        /*
+  var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
+    new google.maps.Size(40, 37),
+    new google.maps.Point(0, 0),
+    new google.maps.Point(12, 35));*/
+        map = new mapboxgl.Map({
+          container: 'map',
+          style: 'mapbox://styles/mapbox/outdoors-v11',
+        });
+        //zoom: 11,
+        //center: {lat: 37.7576171, lng:-122.4376844},
+        // Try HTML5 geolocation.
+
+        /*
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+      var pinImage = new google.maps.MarkerImage("https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|3498db",
+        new google.maps.Size(21, 34),
+        new google.maps.Point(0,0),
+        new google.maps.Point(10, 34)
+      );
+
+      var marker = new google.maps.Marker({
+        position: pos,
+        map: map,
+        opacity: 0.5,
+        icon: pinImage,
+        shadow: pinShadow,
+        animation: google.maps.Animation.DROP
+      });
+
+    //map.setCenter(pos);
+    }, function() {
+    });
+  } else {
+    // Browser doesn't support Geolocation
+  }
+         */
+
+    var request = new XMLHttpRequest();
+    request.open('GET', 'https://api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/03f7QyUHCTm5g2hILaju1Spuzgf2KrNtj/message', true);
+
+    request.onload = function() {
+      if (request.status >= 200 && request.status < 400) {
+        // Success!
+        var data = JSON.parse(request.responseText);
+        var p = getPoints(data);
+        var count = data.response.feedMessageResponse.count
+
+        var previous;
+        for (var i = count - 1; i >= 0 ; i--) {
+          var m = data.response.feedMessageResponse.messages.message[i];
+          (function(m, previous) {
+            if (typeof previous !== "undefined") {
+              /*
+              var line = new google.maps.Polyline({
+                path: [{lat: m.latitude, lng: m.longitude}, {lat: previous.latitude, lng: previous.longitude}],
+                strokeColor: '#e67e22',
+                strokeOpacity: (count - i + 1)*0.75/count + 0.25,
+                strokeWeight: 2,
+                map: map
+              });
+              */
+
+              map.addLayer({
+                "id": "route",
+                "type": "line",
+                "source": {
+                  "type": "geojson",
+                  "data": {
+                    "type": "Feature",
+                    "properties": {},
+                    "geometry": {
+                      "type": "LineString",
+                      "coordinates": [
+                        [m.longitude, m.latitude],
+                        [previous.longitude, previous.latitude]
+                      ]
+                    }
+                  }
+                },
+                "layout": {
+                  "line-join": "round",
+                  "line-cap": "round"
+                },
+                "paint": {
+                  "line-color": "#e67e22",
+                  "line-width": 2
+                }
+              });
+            }
+      var marker = new mapboxgl.Marker(el)
+        .setLngLat([m.longitude, m.latitude])
+        .addTo(map);
+      marker.getElement().style.opacity = (count - i)*0.5/count + 0.5;
+      /*
+          if (m.messageType === "UNLIMITED-TRACK") {
+            marker.setIcon({
+              path: google.maps.SymbolPath.CIRCLE,
+              scale: (count - i) * 3 / count + 2
+            });
+          }
+
+          var infowindow = new google.maps.InfoWindow({
+            content: '<div id="content"><div id="bodyContent"><p>' + formatDate(new Date(m.dateTime)) + '<br /><b>Battery:</b> ' + m.batteryState + '</p></div></div>'
+          });
+          marker.addListener('click', function() {
+            infowindow.open(map, marker);
+          });
+          if (i === 0) {
+            document.getElementById("lastMessage").innerHTML = formatDate(new Date(m.dateTime));
+            document.getElementById("floating-panel").addEventListener('click', function() {
+              infowindow.open(map, marker);
+            })
+       */
+      map.setCenter([m.longitude, m.latitude]);
+      map.setZoom(13);
+      //marker.setAnimation(google.maps.Animation.BOUNCE);
+      //setTimeout(function() { marker.setAnimation(null) }, 3000)
+})(m, previous);
+      previous = m;
 }
 
-function initMap() {
-	var pinShadow = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_shadow",
-		new google.maps.Size(40, 37),
-		new google.maps.Point(0, 0),
-		new google.maps.Point(12, 35));
-	map = new google.maps.Map(document.getElementById('map'), {
-		//zoom: 11,
-		//center: {lat: 37.7576171, lng:-122.4376844},
-		mapTypeId: 'terrain'
-	});
-
-	// Try HTML5 geolocation.
-	if (navigator.geolocation) {
-		navigator.geolocation.getCurrentPosition(function(position) {
-			var pos = {
-				lat: position.coords.latitude,
-				lng: position.coords.longitude
-			};
-			var pinImage = new google.maps.MarkerImage("https://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=|3498db",
-				new google.maps.Size(21, 34),
-				new google.maps.Point(0,0),
-				new google.maps.Point(10, 34)
-			);
-
-			var marker = new google.maps.Marker({
-				position: pos,
-				map: map,
-				opacity: 0.5,
-				icon: pinImage,
-				shadow: pinShadow,
-				animation: google.maps.Animation.DROP
-			});
-
-			//map.setCenter(pos);
-		}, function() {
-		});
-	} else {
-		// Browser doesn't support Geolocation
-	}
-
-	var request = new XMLHttpRequest();
-	request.open('GET', 'https://api.findmespot.com/spot-main-web/consumer/rest-api/2.0/public/feed/03f7QyUHCTm5g2hILaju1Spuzgf2KrNtj/message', true);
-
-	request.onload = function() {
-		if (request.status >= 200 && request.status < 400) {
-			// Success!
-			var data = JSON.parse(request.responseText);
-			var p = getPoints(data);
-			var count = data.response.feedMessageResponse.count
-
-			var previous;
-			for (var i = count - 1; i >= 0 ; i--) {
-				var m = data.response.feedMessageResponse.messages.message[i];
-				(function(m, previous) {
-					if (typeof previous !== "undefined") {
-						var line = new google.maps.Polyline({
-							path: [{lat: m.latitude, lng: m.longitude}, {lat: previous.latitude, lng: previous.longitude}],
-							strokeColor: '#e67e22',
-							strokeOpacity: (count - i + 1)*0.75/count + 0.25,
-							strokeWeight: 2,
-							map: map
-						});
-
-					}
-					var marker = new google.maps.Marker({
-						position: {lat: m.latitude, lng: m.longitude},
-						map: map,
-						zIndex: count - i
-					});
-					if (m.messageType === "UNLIMITED-TRACK") {
-						marker.setIcon({
-							path: google.maps.SymbolPath.CIRCLE,
-							scale: (count - i) * 3 / count + 2
-						});
-						marker.setOpacity((count - i)*0.5/count + 0.5);
-					}
-
-					var infowindow = new google.maps.InfoWindow({
-						content: '<div id="content"><div id="bodyContent"><p>' + formatDate(new Date(m.dateTime)) + '<br /><b>Battery:</b> ' + m.batteryState + '</p></div></div>'
-					});
-					marker.addListener('click', function() {
-						infowindow.open(map, marker);
-					});
-					if (i === 0) {
-						document.getElementById("lastMessage").innerHTML = formatDate(new Date(m.dateTime));
-						document.getElementById("floating-panel").addEventListener('click', function() {
-							infowindow.open(map, marker);
-						})
-						map.setCenter({lat: m.latitude, lng: m.longitude});
-						map.setZoom(13);
-						marker.setAnimation(google.maps.Animation.BOUNCE);
-						setTimeout(function() { marker.setAnimation(null) }, 3000)
-					}
-				})(m, previous);
-				previous = m;
-			}
-
-			/*heatmap = new google.maps.visualization.HeatmapLayer({
-			data: getPoints(data),
-			map: map
-		});*/
-		} else {
-			// We reached our target server, but it returned an error
-
-		}
-	};
-
-	request.onerror = function() {
-		// There was a connection error of some sort
-	};
-
-	request.send();
+      /*heatmap = new google.maps.visualization.HeatmapLayer({
+      data: getPoints(data),
+      map: map
+    });*/
+} else {
+  // We reached our target server, but it returned an error
 
 }
+};
 
-// Heatmap data: 500 Points
-function getPoints(data) {
-	return data.response.feedMessageResponse.messages.message.map(function(m) {
-		return {lat:m.latitude, lng: m.longitude}
-	})
+      request.onerror = function() {
+        // There was a connection error of some sort
+      };
+
+      request.send();
+
 }
+      initMap();
+
+      // Heatmap data: 500 Points
+      function getPoints(data) {
+        return data.response.feedMessageResponse.messages.message.map(function(m) {
+          return {lat:m.latitude, lng: m.longitude}
+        })
+      }
     </script>
-		<script async defer
-			 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxw_uDc5b-LE3rJcX_waJaN3F4mrdS9lM&libraries=visualization&callback=initMap">
-		</script>
 
-	</body>
+  </body>
 </html>
