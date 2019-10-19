@@ -170,7 +170,7 @@ html, body {
                 }
               });
             }
-      var marker = new mapboxgl.Marker(el)
+      var marker = new mapboxgl.Marker()
         .setLngLat([m.longitude, m.latitude])
         .addTo(map);
       marker.getElement().style.opacity = (count - i)*0.5/count + 0.5;
