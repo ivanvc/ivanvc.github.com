@@ -144,7 +144,7 @@ html, body {
               */
 
               map.addLayer({
-                "id": "route",
+                "id": "route-"+previous.longitude+"-"+previous.latitude+"."+m.longitude+"-"+m.latitude,
                 "type": "line",
                 "source": {
                   "type": "geojson",
@@ -188,12 +188,14 @@ html, body {
           marker.addListener('click', function() {
             infowindow.open(map, marker);
           });
+       */
           if (i === 0) {
-            document.getElementById("lastMessage").innerHTML = formatDate(new Date(m.dateTime));
+            document.getElementById("lastMessage").innerHTML = formatDate(new Date(m.dateTime)) + " [BATTERY: " + m.batteryState + "]"
             document.getElementById("floating-panel").addEventListener('click', function() {
               infowindow.open(map, marker);
             })
-       */
+          }
+
       map.setCenter([m.longitude, m.latitude]);
       map.setZoom(13);
       //marker.setAnimation(google.maps.Animation.BOUNCE);
